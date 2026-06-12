@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Kinglet",
+  "scopeName": "source.kinglet",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#keywords" },
+    { "include": "#types" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.kinglet",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.kinglet",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.kinglet",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.kinglet",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.kinglet",
+      "match": "\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?(?:[iu](?:8|16|32|64)|f(?:32|64))?\\b"
+    },
+    "keywords": {
+      "name": "keyword.control.kinglet",
+      "match": "\\b(?:as|break|case|concept|const|continue|default|else|enum|export|false|fn|for|if|import|inspect|let|match|module|mut|pub|return|struct|true|type|using|var|while)\\b"
+    },
+    "types": {
+      "name": "storage.type.kinglet",
+      "match": "\\b(?:bool|float32|float64|int|int8|int16|int32|int64|string|uint8|uint16|uint32|uint64|void)\\b"
+    }
+  }
+}

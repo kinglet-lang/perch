@@ -1,0 +1,78 @@
+{
+  "name": "perch",
+  "displayName": "Perch",
+  "description": "Kinglet language support for VS Code",
+  "version": "0.0.1",
+  "publisher": "kinglet-lang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kinglet-lang/perch"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:kinglet"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "kinglet",
+        "aliases": [
+          "Kinglet",
+          "kinglet"
+        ],
+        "extensions": [
+          ".kl"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kinglet",
+        "scopeName": "source.kinglet",
+        "path": "./syntaxes/kinglet.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Kinglet",
+      "properties": {
+        "kinglet.path": {
+          "type": "string",
+          "default": "kinglet",
+          "description": "Path to the kinglet compiler binary (spawns `kinglet lsp`)."
+        },
+        "kinglet.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces LSP communication between Perch and the kinglet language server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.2.1",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
+}
