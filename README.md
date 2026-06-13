@@ -1,28 +1,65 @@
-# Perch
+# kinglet-lsp
 
-Editor tooling for [Kinglet](https://github.com/kinglet-lang/kinglet): VS Code extension and LSP client.
+C++ [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) implementation for [Kinglet](https://github.com/kinglet-lang/kinglet), plus the **Perch** VS Code extension (client only).
 
-Perch does **not** implement the language server. It spawns `kinglet lsp` (from the self-hosted compiler) over stdio and adapts it to VS Code.
+The server reuses the [bootstrap](https://github.com/kinglet-lang/bootstrap) compiler frontend (lexer, parser, checker, module loader). It does **not** live in the compiler repo.
 
-## Status
+## Layout
 
-Early scaffold — syntax highlighting and LSP client wiring. The `kinglet lsp` subcommand is not shipped yet ([ADR 0004](https://github.com/kinglet-lang/kinglet/blob/main/decisions/0004-lsp-roadmap.md)).
+```
+kinglet-lsp/
+├── server/src/lsp/     # LSP protocol + analysis + completion
+├── server/main.cc      # stdio entry point
+├── src/                # → bootstrap/src (symlink; GN deps //src/*)
+├── build/              # GN config + bootstrap toolchain/config links
+├── kinglet-lsp         # wrapper script → out/Default/kinglet-lsp
+└── package.json        # VS Code extension (spawns kinglet-lsp)
+```
 
-## Development
+## Build (server)
+
+Requires [GN](https://gn.googlesource.com/gn/), ninja, and a C++20 toolchain (clang++).
+
+```bash
+# One-time: link bootstrap sources (or git submodule update --init third_party/bootstrap)
+bash scripts/setup-deps.sh
+
+gn gen out/Default --args='is_debug=false'
+ninja -C out/Default kinglet-lsp
+
+./kinglet-lsp   # stdio LSP; VS Code / Perch spawn this
+```
+
+Windows (MSYS2 clang on PATH):
+
+```powershell
+gn gen out/Default --args='is_debug=false'
+ninja -C out/Default kinglet-lsp
+.\out\Default\kinglet-lsp.exe
+```
+
+## VS Code extension
 
 ```bash
 npm install
 npm run compile
 ```
 
-Press **F5** in VS Code to launch an Extension Development Host with Perch loaded.
+Press **F5** to launch the Extension Development Host. Set `kinglet.lspPath` to your built binary if it is not on `PATH`.
+
+## LSP features
+
+- Diagnostics (parser + type checker)
+- Completion (parser-driven)
+- Go to definition, hover, document symbols
+- Signature help, semantic tokens
 
 ## Settings
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `kinglet.path` | `kinglet` | Path to the compiler binary |
-| `kinglet.trace.server` | `off` | LSP trace level (`off`, `messages`, `verbose`) |
+| `kinglet.lspPath` | `kinglet-lsp` | Language server binary |
+| `kinglet.trace.server` | `off` | LSP trace level |
 
 ## License
 

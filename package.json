@@ -1,13 +1,13 @@
 {
-  "name": "perch",
+  "name": "kinglet-lsp-vscode",
   "displayName": "Perch",
   "description": "Kinglet language support for VS Code",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "kinglet-lang",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kinglet-lang/perch"
+    "url": "https://github.com/kinglet-lang/kinglet-lsp"
   },
   "engines": {
     "vscode": "^1.85.0"
@@ -43,10 +43,10 @@
     "configuration": {
       "title": "Kinglet",
       "properties": {
-        "kinglet.path": {
+        "kinglet.lspPath": {
           "type": "string",
-          "default": "kinglet",
-          "description": "Path to the kinglet compiler binary (spawns `kinglet lsp`)."
+          "default": "kinglet-lsp",
+          "description": "Path to the kinglet-lsp language server binary."
         },
         "kinglet.trace.server": {
           "type": "string",
@@ -56,7 +56,7 @@
             "verbose"
           ],
           "default": "off",
-          "description": "Traces LSP communication between Perch and the kinglet language server."
+          "description": "Trace LSP traffic between VS Code and kinglet-lsp."
         }
       }
     }

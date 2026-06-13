@@ -6,7 +6,11 @@
       "type": "extensionHost",
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-      "outFiles": ["${workspaceFolder}/out/**/*.js"]
+      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "settings": {
+        "kinglet.lspPath": "${workspaceFolder}/out/Default/kinglet-lsp.exe",
+        "kinglet.trace.server": "verbose"
+      }
     }
   ]
 }
