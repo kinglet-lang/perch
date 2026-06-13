@@ -1,0 +1,33 @@
+static_library("lsp") {
+  sources = [
+    "src/lsp/analysis.cc",
+    "src/lsp/analysis.h",
+    "src/lsp/completion_resolver.cc",
+    "src/lsp/completion_resolver.h",
+    "src/lsp/completion_token.cc",
+    "src/lsp/completion_token.h",
+    "src/lsp/document_store.cc",
+    "src/lsp/document_store.h",
+    "src/lsp/json.cc",
+    "src/lsp/json.h",
+    "src/lsp/log.h",
+    "src/lsp/protocol.h",
+    "src/lsp/server.cc",
+    "src/lsp/server.h",
+    "src/lsp/transport.cc",
+    "src/lsp/transport.h",
+    "src/lsp/uri_util.h",
+  ]
+
+  deps = [
+    "//third_party/bootstrap/src/checker",
+    "//third_party/bootstrap/src/lexer",
+    "//third_party/bootstrap/src/module",
+    "//third_party/bootstrap/src/parser",
+  ]
+
+  include_dirs = [
+    "//server/src",
+    "//third_party/bootstrap/src",
+  ]
+}

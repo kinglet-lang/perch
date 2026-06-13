@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Run the built language server (stdio LSP).
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BIN="$ROOT/out/Default/kinglet-lsp"
+if [[ -x "${BIN}.exe" ]]; then
+  exec "${BIN}.exe" "$@"
+fi
+exec "$BIN" "$@"

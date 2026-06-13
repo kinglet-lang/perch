@@ -1,0 +1,22 @@
+if (host_os == "win") {
+  set_default_toolchain("//build/toolchain:win")
+} else {
+  set_default_toolchain("//build/toolchain:unix")
+}
+
+default_configs = [
+  "//build/config:compiler",
+  "//build/config:warnings",
+]
+
+set_defaults("executable") {
+  configs = default_configs
+}
+
+set_defaults("static_library") {
+  configs = default_configs
+}
+
+set_defaults("source_set") {
+  configs = default_configs
+}

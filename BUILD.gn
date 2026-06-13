@@ -1,0 +1,15 @@
+group("default") {
+  deps = [ ":kinglet-lsp" ]
+}
+
+executable("kinglet-lsp") {
+  output_name = "kinglet-lsp"
+  sources = [ "server/main.cc" ]
+
+  deps = [ "//server:lsp" ]
+
+  include_dirs = [
+    "//server/src",
+    "//third_party/bootstrap/src",
+  ]
+}
