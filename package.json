@@ -1,8 +1,8 @@
 {
   "name": "kinglet-lsp-vscode",
-  "displayName": "Perch",
-  "description": "Kinglet language support for VS Code",
-  "version": "0.1.0",
+  "displayName": "Kinglet",
+  "description": "Kinglet (.kl) syntax highlighting and language server",
+  "version": "0.1.3",
   "publisher": "kinglet-lang",
   "license": "MIT",
   "repository": {
@@ -16,7 +16,9 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:kinglet"
+    "onLanguage:kinglet",
+    "onCommand:kinglet.showServerLog",
+    "onCommand:kinglet.restartServer"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -40,6 +42,23 @@
         "path": "./syntaxes/kinglet.tmLanguage.json"
       }
     ],
+    "commands": [
+      {
+        "command": "kinglet.showServerLog",
+        "title": "Show Language Server Log",
+        "category": "Kinglet"
+      },
+      {
+        "command": "kinglet.restartServer",
+        "title": "Restart Language Server",
+        "category": "Kinglet"
+      }
+    ],
+    "configurationDefaults": {
+      "files.associations": {
+        "*.kl": "kinglet"
+      }
+    },
     "configuration": {
       "title": "Kinglet",
       "properties": {
@@ -55,21 +74,24 @@
             "messages",
             "verbose"
           ],
-          "default": "off",
+          "default": "messages",
           "description": "Trace LSP traffic between VS Code and kinglet-lsp."
         }
       }
     }
   },
   "scripts": {
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "compile": "esbuild client/extension.ts --bundle --outfile=out/extension.js --external:vscode --platform=node --format=cjs --sourcemap",
+    "watch": "esbuild client/extension.ts --bundle --outfile=out/extension.js --external:vscode --platform=node --format=cjs --sourcemap --watch",
+    "typecheck": "tsc -p ./ --noEmit",
+    "prepackage": "npm run compile && node scripts/stage-vsix.js",
     "package": "vsce package"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^3.2.1",
+    "esbuild": "^0.28.1",
     "typescript": "^5.7.2"
   },
   "dependencies": {
