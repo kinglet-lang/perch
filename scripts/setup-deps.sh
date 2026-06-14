@@ -27,5 +27,6 @@ mkdir -p "$ROOT/build" "$ROOT/third_party"
 link_dir third_party/bootstrap "$BOOTSTRAP"
 link_dir build/config "$BOOTSTRAP/build/config"
 link_dir build/toolchain "$BOOTSTRAP/build/toolchain"
+link_dir src "$BOOTSTRAP/src"
 
 echo "linked bootstrap from $BOOTSTRAP"
