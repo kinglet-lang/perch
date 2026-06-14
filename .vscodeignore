@@ -1,7 +1,34 @@
 .vscode/**
 .vscode-test/**
+client/**
+src
+src/
 src/**
+
+# Local scratch / debug artefacts
+tmp-err.txt
+tmp-*.txt
+.git/**
 .gitignore
 tsconfig.json
 .github/**
 node_modules/**
+
+# C++ / GN tree — not shipped in the VSIX (third_party/bootstrap is a junction)
+third_party/**
+server/**
+build/**
+scripts/**
+.gn
+BUILD.gn
+kinglet-lsp
+test.kl
+
+# GN build artefacts (keep out/extension.js for the client)
+out/Default/**
+out/*.ninja
+out/.ninja_*
+out/args.gn
+out/build.ninja*
+out/toolchain.ninja
+out/obj/**

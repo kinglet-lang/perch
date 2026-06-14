@@ -4,10 +4,15 @@
 /third_party/bootstrap
 /build/config
 /build/toolchain
+/src
 
 # Build outputs
 /out/
+bin/
+
 /node_modules/
 *.vsix
 .DS_Store
 test.kl
+tmp-err.txt
+tmp-*.txt
