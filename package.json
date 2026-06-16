@@ -4,6 +4,7 @@
   "description": "Kinglet (.kl) syntax highlighting and language server",
   "version": "0.1.3",
   "publisher": "kinglet-lang",
+  "author": "Kinglet Language Developers",
   "license": "MIT",
   "icon": "image/icons/icon.png",
   "repository": {
