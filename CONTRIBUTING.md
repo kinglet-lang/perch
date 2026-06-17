@@ -1,8 +1,8 @@
-# Contributing to kinglet-lsp
+# Contributing to Perch
 
 C++ [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
-implementation for [Kinglet](https://github.com/kinglet-lang/kinglet), plus the
-**Perch** VS Code extension (client only).
+server for language support in [Kinglet](https://github.com/kinglet-lang/kinglet),
+plus the **Perch** VS Code extension (client only).
 
 The server reuses the [bootstrap](https://github.com/kinglet-lang/bootstrap)
 compiler frontend (lexer, parser, checker, module loader). It does **not** live
@@ -11,7 +11,7 @@ in the compiler repo.
 ## Layout
 
 ```
-kinglet-lsp/
+perch/
 ├── server/src/lsp/     # LSP protocol + analysis + completion
 ├── server/main.cc      # stdio entry point
 ├── client/             # VS Code extension (TypeScript)
@@ -35,7 +35,7 @@ bash scripts/setup-deps.sh   # macOS/Linux
 gn gen out/Default --args='is_debug=false'
 ninja -C out/Default kinglet-lsp
 
-./kinglet-lsp   # stdio LSP; VS Code / Perch spawn this
+./kinglet-lsp   # stdio LSP; Perch spawns this
 ```
 
 Windows (MSYS2 clang on PATH):
@@ -64,7 +64,7 @@ ninja -C out/Default kinglet-lsp
 npm run package
 ```
 
-In VS Code: **Extensions** → `...` → **Install from VSIX…** → pick `kinglet-lsp-vscode-0.1.3.vsix`.
+In VS Code: **Extensions** → `...` → **Install from VSIX…** → pick `perch-0.1.3.vsix`.
 
 The client is **esbuild-bundled** into `out/extension.js` (includes `vscode-languageclient`).
 Do not exclude `node_modules` from the VSIX without bundling — that leaves the extension stuck on **activating**.
@@ -74,9 +74,9 @@ No `kinglet.lspPath` setting is required when the VSIX includes the matching bin
 **Verify LSP is running**
 
 1. Open a `.kl` file — bottom-right language mode should be **Kinglet** (not Plain Text).
-2. Status bar (bottom-right) should show **Kinglet** with a checkmark when the server is up.
-3. **Ctrl+Shift+P** → **Kinglet: Show Language Server Log** — opens the **Kinglet** output channel.
-4. In **View → Output**, pick **Kinglet** from the dropdown (not "Perch").
+2. Status bar (bottom-right) should show **Perch** with a checkmark when the server is up.
+3. **Ctrl+Shift+P** → **Perch: Show Language Server Log** — opens the **Perch** output channel.
+4. In **View → Output**, pick **Perch** from the dropdown.
 5. For RPC traces: `"kinglet.trace.server": "verbose"`.
 
 ### Option B — Extension Development Host (F5)

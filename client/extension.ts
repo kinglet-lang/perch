@@ -65,7 +65,7 @@ function setStatus(text: string, tooltip: string): void {
 
 function log(line: string): void {
   output?.appendLine(line);
-  console.log(`[Kinglet] ${line}`);
+  console.log(`[Perch] ${line}`);
 }
 
 function startLanguageServer(context: ExtensionContext, lspPath: string): void {
@@ -101,26 +101,26 @@ function startLanguageServer(context: ExtensionContext, lspPath: string): void {
     revealOutputChannelOn: RevealOutputChannelOn.Error,
   };
 
-  client = new LanguageClient('kinglet', 'Kinglet', serverOptions, clientOptions);
+  client = new LanguageClient('perch', 'Perch', serverOptions, clientOptions);
   context.subscriptions.push({ dispose: () => void client?.stop() });
 
   client
     .start()
     .then(() => {
-      setStatus('$(check) Kinglet', `Language server running\n${lspPath}`);
+      setStatus('$(check) Perch', `Kinglet language server running\n${lspPath}`);
       log('Language server started.');
     })
     .catch((err: unknown) => {
       const message = err instanceof Error ? err.message : String(err);
-      setStatus('$(error) Kinglet', `Failed to start language server\n${message}`);
+      setStatus('$(error) Perch', `Failed to start Kinglet language server\n${message}`);
       log(`Failed to start language server: ${message}`);
-      void window.showErrorMessage(`Kinglet language server failed to start: ${message}`);
+      void window.showErrorMessage(`Perch: Kinglet language server failed to start: ${message}`);
       output?.show(true);
     });
 }
 
 export function activate(context: ExtensionContext): void {
-  output = window.createOutputChannel('Kinglet');
+  output = window.createOutputChannel('Perch');
   context.subscriptions.push(output);
 
   statusBar = window.createStatusBarItem(StatusBarAlignment.Right, 100);
@@ -140,7 +140,7 @@ export function activate(context: ExtensionContext): void {
     }),
   );
 
-  setStatus('$(sync~spin) Kinglet', 'Kinglet extension loading…');
+  setStatus('$(sync~spin) Perch', 'Perch loading…');
   log(`Extension activated (version ${context.extension.packageJSON.version}).`);
   log(`Extension path: ${context.extensionPath}`);
 
@@ -151,8 +151,8 @@ export function activate(context: ExtensionContext): void {
   if (!tryExecutable(lspPath)) {
     const msg =
       `Kinglet language server not found at "${lspPath}". ` +
-      'Set kinglet.lspPath or reinstall the VSIX built with npm run package.';
-    setStatus('$(warning) Kinglet', msg);
+      'Set kinglet.lspPath or reinstall the Perch VSIX built with npm run package.';
+    setStatus('$(warning) Perch', msg);
     log(msg);
     void window.showWarningMessage(msg);
     output.show(true);
