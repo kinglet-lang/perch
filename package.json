@@ -6,7 +6,7 @@
   "publisher": "kinglet-lang",
   "author": "Kinglet Language Developers",
   "license": "MIT",
-  "icon": "image/icons/perch.png",
+  "icon": "image/icons/kinglet.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/kinglet-lang/perch"

@@ -1,25 +1,31 @@
 #!/usr/bin/env python3
-"""Generate PNG icons for Perch (extension icon, README, and framed logo)."""
+"""Generate PNG icons for Perch (file icons, README, and extension marketplace logo)."""
 
 from __future__ import annotations
 
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 ICONS = ROOT / "image" / "icons"
-SIZE = 128
-RADIUS = 24
-BORDER = 2
-PADDING = 6
+
+# Match icon.svg / icon-dark.svg viewBox (1294 x 1519).
+SVG_WIDTH = 1294
+SVG_HEIGHT = 1519
+
+ICON_PNG_HEIGHT = 256
+MARKETPLACE_SIZE = 128
+SUPERSAMPLE = 4
+LOGO_RADIUS = 24
 
 
-def run_rsvg(svg: Path, png: Path, width: int, height: int) -> None:
+def run_rsvg_height(svg: Path, png: Path, height: int) -> None:
     subprocess.run(
-        ["rsvg-convert", "-w", str(width), "-h", str(height), str(svg), "-o", str(png)],
+        ["rsvg-convert", "-h", str(height), str(svg), "-o", str(png)],
         check=True,
     )
 
@@ -30,41 +36,54 @@ def rounded_mask(size: int, radius: int) -> Image.Image:
     return mask
 
 
+def render_svg(svg: Path, target_height: int) -> Image.Image:
+    """Rasterize SVG at the native portrait aspect ratio (no square letterboxing)."""
+    work_height = target_height * SUPERSAMPLE
+    with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp:
+        tmp_path = Path(tmp.name)
+
+    try:
+        run_rsvg_height(svg, tmp_path, work_height)
+        image = Image.open(tmp_path).convert("RGBA")
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+    if SUPERSAMPLE > 1:
+        target_width = round(target_height * SVG_WIDTH / SVG_HEIGHT)
+        image = image.resize((target_width, target_height), Image.Resampling.LANCZOS)
+    return image
+
+
+def save_png(image: Image.Image, path: Path) -> None:
+    image.save(path, format="PNG", compress_level=3)
+
+
+def kinglet_source_path() -> Path:
+    for candidate in (
+        ROOT / "third_party/bootstrap/assets/kinglet.png",
+        ICONS / "kinglet-source.png",
+    ):
+        if candidate.exists():
+            return candidate
+    raise FileNotFoundError(
+        "kinglet source PNG not found (expected third_party/bootstrap/assets/kinglet.png)"
+    )
+
+
 def generate_icon_png() -> None:
-    run_rsvg(ICONS / "icon.svg", ICONS / "icon.png", SIZE, SIZE)
+    save_png(render_svg(ICONS / "icon.svg", ICON_PNG_HEIGHT), ICONS / "icon.png")
 
 
 def generate_icon_dark_png() -> None:
-    # README displays at 88 CSS px; 2x asset keeps edges sharp.
-    run_rsvg(ICONS / "icon-dark.svg", ICONS / "icon-dark.png", 176, 176)
+    save_png(render_svg(ICONS / "icon-dark.svg", ICON_PNG_HEIGHT), ICONS / "icon-dark.png")
 
 
-def generate_perch_png() -> None:
-    bird = Image.open(ICONS / "icon.png").convert("RGBA")
-
-    canvas = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(canvas)
-    draw.rounded_rectangle(
-        (0, 0, SIZE - 1, SIZE - 1),
-        radius=RADIUS,
-        fill=(245, 246, 248, 255),
-        outline=(200, 205, 214, 255),
-        width=BORDER,
-    )
-
-    inner = SIZE - 2 * PADDING - 2 * BORDER
-    bird.thumbnail((inner, inner), Image.Resampling.LANCZOS)
-    inner_radius = max(RADIUS - PADDING, 8)
-    inner_mask = rounded_mask(inner, inner_radius)
-    bird.putalpha(Image.composite(bird.getchannel("A"), Image.new("L", bird.size, 0), inner_mask))
-
-    offset = ((SIZE - bird.width) // 2, (SIZE - bird.height) // 2)
-    canvas.paste(bird, offset, bird)
-
-    outer_mask = rounded_mask(SIZE, RADIUS)
-    canvas.putalpha(Image.composite(canvas.getchannel("A"), Image.new("L", (SIZE, SIZE), 0), outer_mask))
-
-    canvas.convert("RGB").save(ICONS / "perch.png", optimize=True)
+def generate_kinglet_png() -> None:
+    """Extension marketplace logo: kinglet bird on a rounded square."""
+    image = Image.open(kinglet_source_path()).convert("RGBA")
+    image = image.resize((MARKETPLACE_SIZE, MARKETPLACE_SIZE), Image.Resampling.LANCZOS)
+    image.putalpha(rounded_mask(MARKETPLACE_SIZE, LOGO_RADIUS))
+    save_png(image, ICONS / "kinglet.png")
 
 
 def main() -> int:
@@ -74,8 +93,15 @@ def main() -> int:
 
     generate_icon_png()
     generate_icon_dark_png()
-    generate_perch_png()
-    print("Generated image/icons/icon.png, icon-dark.png, perch.png")
+    generate_kinglet_png()
+
+    icon = Image.open(ICONS / "icon.png")
+    logo = Image.open(ICONS / "kinglet.png")
+    print(
+        "Generated image/icons/icon.png "
+        f"({icon.size[0]}x{icon.size[1]}), icon-dark.png ({icon.size[0]}x{icon.size[1]}), "
+        f"kinglet.png ({logo.size[0]}x{logo.size[1]})"
+    )
     return 0
 
 
