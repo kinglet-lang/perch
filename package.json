@@ -63,6 +63,10 @@
     "configurationDefaults": {
       "files.associations": {
         "*.kl": "kinglet"
+      },
+      "[kinglet]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "kinglet-lang.perch"
       }
     },
     "configuration": {
