@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="image/icons/icon.svg" width="88" alt="Kinglet file icon (light themes)">
+  <img src="image/icons/icon.png" width="88" alt="Kinglet file icon (light themes)">
   &nbsp;&nbsp;
-  <img src="image/icons/icon-dark.svg" width="88" alt="Kinglet file icon (dark themes)">
+  <img src="image/icons/icon-dark.png" width="88" alt="Kinglet file icon (dark themes)">
 </p>
 
 <p align="center">
