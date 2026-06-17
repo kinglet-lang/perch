@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/kinglet-lang/perch/main/image/icons/icon.png" width="128" alt="Kinglet">
+  <img src="image/icons/icon.svg" width="88" alt="Kinglet file icon (light themes)">
+  &nbsp;&nbsp;
+  <img src="image/icons/icon-dark.svg" width="88" alt="Kinglet file icon (dark themes)">
 </p>
 
 <h1 align="center">Perch</h1>
