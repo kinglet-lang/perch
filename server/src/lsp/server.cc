@@ -3,6 +3,7 @@
 #include "lexer/scanner.h"
 #include "lsp/completion_resolver.h"
 #include "lsp/completion_token.h"
+#include "lsp/formatting.h"
 #include "lsp/log.h"
 #include "lsp/protocol.h"
 #include "lsp/uri_util.h"
@@ -69,6 +70,17 @@ void Server::handle_message(const json::Value &msg) {
     send_response(id, handle_signature_help(params));
   } else if (method == "textDocument/semanticTokens/full") {
     send_response(id, handle_semantic_tokens(params));
+  } else if (method == "textDocument/formatting") {
+    const auto formatted = handle_formatting(params);
+    if (formatted.is_object()) {
+      const auto &obj = formatted.as_object();
+      auto err_it = obj.find("error");
+      if (err_it != obj.end()) {
+        send_error(id, -32603, err_it->second.as_string());
+        return;
+      }
+    }
+    send_response(id, formatted);
   } else if (method == "shutdown") {
     shutdown_requested_ = true;
     send_response(id, json::Value::null());
@@ -149,6 +161,8 @@ json::Value Server::handle_initialize(const json::Value &) {
   sem_tokens["legend"] = json::Value(sem_legend);
   sem_tokens["full"] = json::Value(true);
   capabilities["semanticTokensProvider"] = json::Value(sem_tokens);
+
+  capabilities["documentFormattingProvider"] = json::Value(true);
 
   json::Object server_info;
   server_info["name"] = json::Value::string("kinglet");
@@ -755,6 +769,30 @@ json::Value Server::handle_semantic_tokens(const json::Value &params) {
   json::Object result;
   result["data"] = json::Value(data);
   return json::Value(result);
+}
+
+json::Value Server::handle_formatting(const json::Value &params) {
+  const std::string uri = uri_from_params(params);
+  if (uri.empty()) {
+    json::Object err;
+    err["error"] = json::Value::string("missing text document URI");
+    return json::Value(err);
+  }
+
+  const Document *doc = store_.get(uri);
+  if (!doc) {
+    return json::Value(json::Array{});
+  }
+
+  const std::string file_path = uri_to_path(uri);
+  const FormatDocumentResult result = format_document_text(file_path, doc->text);
+  if (!result.error.empty()) {
+    json::Object err;
+    err["error"] = json::Value::string(result.error);
+    return json::Value(err);
+  }
+
+  return make_formatting_edits(doc->text, result.formatted);
 }
 
 } // namespace kinglet::lsp

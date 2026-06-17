@@ -8,6 +8,8 @@ static_library("lsp") {
     "src/lsp/completion_token.h",
     "src/lsp/document_store.cc",
     "src/lsp/document_store.h",
+    "src/lsp/formatting.cc",
+    "src/lsp/formatting.h",
     "src/lsp/json.cc",
     "src/lsp/json.h",
     "src/lsp/log.h",
@@ -24,6 +26,7 @@ static_library("lsp") {
     "//third_party/bootstrap/src/lexer",
     "//third_party/bootstrap/src/module",
     "//third_party/bootstrap/src/parser",
+    "//third_party/bootstrap/src/preen",
   ]
 
   include_dirs = [
