@@ -1,7 +1,9 @@
 <p align="center">
-  <img src="image/icons/icon.png" width="88" alt="Kinglet file icon (light themes)">
-  &nbsp;&nbsp;
-  <img src="image/icons/icon-dark.png" width="88" alt="Kinglet file icon (dark themes)">
+  <img src="image/icons/icon.png" width="88" alt="Kinglet .kl file icon (light)">
+  <img src="image/icons/icon-nest.png" width="88" alt="Kinglet .nest manifest icon (light)">
+  <br>
+  <img src="image/icons/icon-dark.png" width="88" alt="Kinglet .kl file icon (dark)">
+  <img src="image/icons/icon-nest-dark.png" width="88" alt="Kinglet .nest manifest icon (dark)">
 </p>
 
 <p align="center">
@@ -14,7 +16,7 @@
   </a>
 </p>
 
-<p align="center">Language support for <a href="https://github.com/kinglet-lang/kinglet">Kinglet</a> (<code>.kl</code>) — syntax highlighting and a fast, native language server.</p>
+<p align="center">Language support for <a href="https://github.com/kinglet-lang/kinglet">Kinglet</a> (<code>.kl</code>) and <code>kinglet.nest</code> project manifests — syntax highlighting, diagnostics, completion, and a fast, native language server.</p>
 
 ---
 
@@ -27,7 +29,9 @@
 - **Document Symbols** — outline view and breadcrumbs
 - **Signature Help** — parameter hints while you call functions
 - **Semantic Tokens** — precise, type-aware highlighting
-- **Syntax Highlighting** — TextMate grammar for `.kl` files
+- **Syntax Highlighting** — TextMate grammar for `.kl` files and `kinglet.nest` project manifests
+- **Manifest Diagnostics** — real-time validation of `kinglet.nest` modules, targets, build, and fmt blocks
+- **Manifest Completion** — context-aware suggestions for module names, paths, backends, and formatter extensions
 
 The language server is written in C++ and reuses the official Kinglet compiler
 frontend, so diagnostics match the compiler exactly.
@@ -36,6 +40,7 @@ frontend, so diagnostics match the compiler exactly.
 
 1. Install the extension.
 2. Open any `.kl` file — the language mode (bottom-right) switches to **Kinglet**.
+   Open a `kinglet.nest` file — the language mode switches to **Kinglet Nest**.
 3. The language server starts automatically; a **Perch** indicator appears in
    the status bar once it is up.
 
@@ -58,8 +63,9 @@ frontend, so diagnostics match the compiler exactly.
 
 ### Troubleshooting
 
-- **File opens as Plain Text** — set the language mode (bottom-right) to **Kinglet**,
-  or ensure the file ends in `.kl`.
+- **File opens as Plain Text** — set the language mode (bottom-right) to **Kinglet**
+  (or **Kinglet Nest** for `kinglet.nest` manifests), or ensure the file has the
+  right extension / filename.
 - **No diagnostics / completion** — run **Perch: Show Language Server Log** to
   check the server started. For detailed RPC traces, set
   `"kinglet.trace.server": "verbose"`.
