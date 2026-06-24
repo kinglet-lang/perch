@@ -1,0 +1,10 @@
+{
+  "required": [
+    "module file 'lib/math.kl' does not exist",
+    "duplicate key 'math'",
+    "binary target references module 'app'",
+    "build.default 'ghost' is not declared",
+    "unknown build key 'banana'",
+    "unknown fmt extension 'no-such-extension'"
+  ]
+}

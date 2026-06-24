@@ -1,0 +1,22 @@
+project "x" version "0.1.0"
+
+modules {
+  math = "lib/math.kl"
+  math = "lib/math2.kl"
+}
+
+targets {
+  demo = binary "app"
+  m    = library
+}
+
+build {
+  default = "ghost"
+  backend = native
+  banana  = "oops"
+}
+
+fmt {
+  indent = 2
+  extensions = "no-such-extension"
+}

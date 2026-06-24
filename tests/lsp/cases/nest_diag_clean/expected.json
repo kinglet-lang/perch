@@ -1,0 +1,4 @@
+{
+  "required": [],
+  "forbidden": ["does not exist", "unknown", "duplicate", "not declared"]
+}

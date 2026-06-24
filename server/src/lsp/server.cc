@@ -5,11 +5,13 @@
 #include "lsp/completion_token.h"
 #include "lsp/formatting.h"
 #include "lsp/log.h"
+#include "lsp/nest_analysis.h"
 #include "lsp/protocol.h"
 #include "lsp/uri_util.h"
 #include "frontend/parser/parser.h"
 
 #include <cctype>
+#include <filesystem>
 #include <iostream>
 #include <set>
 #include <sstream>
@@ -341,15 +343,23 @@ void Server::merge_preserved_analysis(AnalysisResult &next, const AnalysisResult
 void Server::ensure_analyzed(Document &doc) {
   if (!doc.dirty) return;
   try {
-    AnalysisResult preserved;
-    preserved.imported_namespaces = doc.analysis.imported_namespaces;
-    preserved.imported_symbols = doc.analysis.imported_symbols;
-    preserved.opened_namespaces = doc.analysis.opened_namespaces;
-    preserved.used_namespaces = doc.analysis.used_namespaces;
+    const std::string file_path = uri_to_path(doc.uri);
+    // .nest manifests use a separate analyzer — different grammar, different
+    // diagnostics, no AST. We deliberately bypass merge_preserved_analysis
+    // because there are no imported_symbols to carry across edits.
+    if (std::filesystem::path(file_path).filename().string() == "kinglet.nest") {
+      doc.analysis = analyze_nest(file_path, doc.text);
+    } else {
+      AnalysisResult preserved;
+      preserved.imported_namespaces = doc.analysis.imported_namespaces;
+      preserved.imported_symbols = doc.analysis.imported_symbols;
+      preserved.opened_namespaces = doc.analysis.opened_namespaces;
+      preserved.used_namespaces = doc.analysis.used_namespaces;
 
-    auto new_analysis = analyze(doc.text, uri_to_path(doc.uri));
-    merge_preserved_analysis(new_analysis, preserved);
-    doc.analysis = std::move(new_analysis);
+      auto new_analysis = analyze(doc.text, file_path);
+      merge_preserved_analysis(new_analysis, preserved);
+      doc.analysis = std::move(new_analysis);
+    }
   } catch (const std::exception &e) {
     lsp_log(std::string("analysis error: ") + e.what());
   } catch (...) {
