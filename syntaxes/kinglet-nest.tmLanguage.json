@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Kinglet Nest",
+  "scopeName": "source.kinglet-nest",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#project-line" },
+    { "include": "#block-headers" },
+    { "include": "#strings" },
+    { "include": "#numbers" },
+    { "include": "#constants" },
+    { "include": "#binary-target" },
+    { "include": "#known-keys" },
+    { "include": "#module-key" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.kinglet-nest",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "project-line": {
+      "comment": "project \"name\" version \"semver\"",
+      "match": "^\\s*(project)\\b(?:\\s+(\"[^\"]*\"))?(?:\\s+(version)\\b(?:\\s+(\"[^\"]*\"))?)?",
+      "captures": {
+        "1": { "name": "keyword.control.kinglet-nest" },
+        "2": { "name": "string.quoted.double.kinglet-nest" },
+        "3": { "name": "keyword.control.kinglet-nest" },
+        "4": { "name": "string.quoted.double.kinglet-nest" }
+      }
+    },
+    "block-headers": {
+      "match": "\\b(modules|targets|build|fmt)\\s*(\\{)",
+      "captures": {
+        "1": { "name": "keyword.control.section.kinglet-nest" },
+        "2": { "name": "punctuation.section.block.begin.kinglet-nest" }
+      }
+    },
+    "strings": {
+      "name": "string.quoted.double.kinglet-nest",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.kinglet-nest",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.kinglet-nest",
+      "match": "\\b\\d+\\b"
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.kinglet-nest",
+          "match": "\\b(true|false)\\b"
+        },
+        {
+          "name": "constant.language.backend.kinglet-nest",
+          "match": "\\b(native|bytecode)\\b"
+        }
+      ]
+    },
+    "binary-target": {
+      "comment": "targets { foo = binary \"app\" | library }",
+      "patterns": [
+        {
+          "match": "\\b(binary)\\b(?:\\s+(\"[^\"]*\"))?",
+          "captures": {
+            "1": { "name": "storage.type.target.kinglet-nest" },
+            "2": { "name": "string.quoted.double.kinglet-nest" }
+          }
+        },
+        {
+          "match": "\\b(library)\\b",
+          "captures": {
+            "1": { "name": "storage.type.target.kinglet-nest" }
+          }
+        }
+      ]
+    },
+    "known-keys": {
+      "comment": "Reserved keys inside build {} / fmt {}, highlighted distinctly so misspellings stand out.",
+      "match": "^\\s*(default|backend|out|cache|indent|max_width|newline|trailing_comma|extensions)\\s*=",
+      "captures": {
+        "1": { "name": "support.variable.kinglet-nest" }
+      }
+    },
+    "module-key": {
+      "comment": "Dotted module name in modules {} / targets {}.  Matches at the start of a line so we don't bind to keywords elsewhere.",
+      "match": "^\\s*([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)\\s*=",
+      "captures": {
+        "1": { "name": "entity.name.namespace.kinglet-nest" }
+      }
+    }
+  }
+}

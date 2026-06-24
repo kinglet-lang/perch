@@ -93,9 +93,12 @@ function startLanguageServer(context: ExtensionContext, lspPath: string): void {
   };
 
   const clientOptions: LanguageClientOptions = {
-    documentSelector: [{ scheme: 'file', language: 'kinglet' }],
+    documentSelector: [
+      { scheme: 'file', language: 'kinglet' },
+      { scheme: 'file', language: 'kinglet-nest' },
+    ],
     synchronize: {
-      fileEvents: workspace.createFileSystemWatcher('**/kinglet.toml'),
+      fileEvents: workspace.createFileSystemWatcher('**/kinglet.{toml,nest}'),
     },
     outputChannel: output,
     revealOutputChannelOn: RevealOutputChannelOn.Error,

@@ -1,7 +1,7 @@
 {
   "name": "perch",
   "displayName": "Perch for Kinglet",
-  "description": "Language support for Kinglet — syntax highlighting and language server for .kl files.",
+  "description": "Language support for Kinglet — syntax highlighting and language server for .kl files and kinglet.nest project manifests.",
   "version": "0.1.7",
   "publisher": "kinglet-lang",
   "author": "Kinglet Language Developers",
@@ -19,6 +19,7 @@
   ],
   "activationEvents": [
     "onLanguage:kinglet",
+    "onLanguage:kinglet-nest",
     "onCommand:kinglet.showServerLog",
     "onCommand:kinglet.restartServer"
   ],
@@ -39,6 +40,21 @@
           "light": "./image/icons/icon.svg",
           "dark": "./image/icons/icon-dark.svg"
         }
+      },
+      {
+        "id": "kinglet-nest",
+        "aliases": [
+          "Kinglet Nest",
+          "kinglet-nest"
+        ],
+        "filenames": [
+          "kinglet.nest"
+        ],
+        "configuration": "./nest-language-configuration.json",
+        "icon": {
+          "light": "./image/icons/icon.svg",
+          "dark": "./image/icons/icon-dark.svg"
+        }
       }
     ],
     "grammars": [
@@ -46,6 +62,11 @@
         "language": "kinglet",
         "scopeName": "source.kinglet",
         "path": "./syntaxes/kinglet.tmLanguage.json"
+      },
+      {
+        "language": "kinglet-nest",
+        "scopeName": "source.kinglet-nest",
+        "path": "./syntaxes/kinglet-nest.tmLanguage.json"
       }
     ],
     "commands": [
@@ -62,11 +83,16 @@
     ],
     "configurationDefaults": {
       "files.associations": {
-        "*.kl": "kinglet"
+        "*.kl": "kinglet",
+        "kinglet.nest": "kinglet-nest"
       },
       "[kinglet]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "kinglet-lang.perch"
+      },
+      "[kinglet-nest]": {
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true
       }
     },
     "configuration": {
