@@ -204,6 +204,7 @@ void CompletionResolver::add_namespace_completions(json::Array &items) {
 json::Array CompletionResolver::resolve_top_level() {
   json::Array items;
   add_scope_symbols(items);
+  add_type_keywords(items);
   add_decl_keywords(items);
   add_namespace_completions(items);
   // Declaration-only snippets (no control-flow statement snippets at file scope).
@@ -642,8 +643,6 @@ json::Array CompletionResolver::resolve_struct_literal(const std::string &struct
       break;
     }
   }
-  // Slots are positional value expressions, so offer self / locals / types too.
-  add_scope_symbols(items);
   return items;
 }
 
