@@ -73,7 +73,8 @@ CompletionTokenResult inject_completion_token(
          tok.type == TokenType::BOOL ||
          tok.type == TokenType::VOID ||
          tok.type == TokenType::BYTE ||
-         tok.type == TokenType::AUTO)) {
+         tok.type == TokenType::AUTO ||
+         tok.type == TokenType::LET)) {
       int prefix_len = cursor_col - tok.column;
       if (prefix_len > 0 && prefix_len <= static_cast<int>(tok.lexeme.size())) {
         result.prefix = std::string(tok.lexeme.substr(0, static_cast<std::size_t>(prefix_len)));
