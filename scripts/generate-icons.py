@@ -78,6 +78,14 @@ def generate_icon_dark_png() -> None:
     save_png(render_svg(ICONS / "icon-dark.svg", ICON_PNG_HEIGHT), ICONS / "icon-dark.png")
 
 
+def generate_nest_icon_png() -> None:
+    save_png(render_svg(ICONS / "icon-nest.svg", ICON_PNG_HEIGHT), ICONS / "icon-nest.png")
+
+
+def generate_nest_icon_dark_png() -> None:
+    save_png(render_svg(ICONS / "icon-nest-dark.svg", ICON_PNG_HEIGHT), ICONS / "icon-nest-dark.png")
+
+
 def generate_kinglet_png() -> None:
     """Extension marketplace logo: kinglet bird on a rounded square."""
     image = Image.open(kinglet_source_path()).convert("RGBA")
@@ -93,13 +101,18 @@ def main() -> int:
 
     generate_icon_png()
     generate_icon_dark_png()
+    generate_nest_icon_png()
+    generate_nest_icon_dark_png()
     generate_kinglet_png()
 
     icon = Image.open(ICONS / "icon.png")
+    nest = Image.open(ICONS / "icon-nest.png")
     logo = Image.open(ICONS / "kinglet.png")
     print(
         "Generated image/icons/icon.png "
         f"({icon.size[0]}x{icon.size[1]}), icon-dark.png ({icon.size[0]}x{icon.size[1]}), "
+        f"icon-nest.png ({nest.size[0]}x{nest.size[1]}), "
+        f"icon-nest-dark.png ({nest.size[0]}x{nest.size[1]}), "
         f"kinglet.png ({logo.size[0]}x{logo.size[1]})"
     )
     return 0

@@ -52,8 +52,8 @@
         ],
         "configuration": "./nest-language-configuration.json",
         "icon": {
-          "light": "./image/icons/icon.svg",
-          "dark": "./image/icons/icon-dark.svg"
+          "light": "./image/icons/icon-nest.svg",
+          "dark": "./image/icons/icon-nest-dark.svg"
         }
       }
     ],
