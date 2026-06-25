@@ -138,6 +138,17 @@ void CompletionResolver::add_type_keywords(json::Array &items, bool include_void
   }
 }
 
+void CompletionResolver::add_cast_keywords(json::Array &items) {
+  // Built-in types valid as a conversion target in expression position,
+  // e.g. `string(v)` or `int(x)`. Unlike add_type_keywords, no trailing
+  // space is inserted (the user follows with '('), and void/auto are
+  // excluded since neither is a valid conversion target.
+  for (const char *kw : {"int", "float", "double", "bool", "string", "byte"}) {
+    if (!matches_prefix(kw)) continue;
+    items.push_back(protocol::completion_item(kw, 14));
+  }
+}
+
 void CompletionResolver::add_statement_keywords(json::Array &items) {
   // Keywords valid inside a function body (statement position).
   const char *kw_with_space[] = {"if",    "else", "for",   "while",
@@ -237,6 +248,7 @@ json::Array CompletionResolver::resolve_statement() {
 json::Array CompletionResolver::resolve_expression() {
   json::Array items;
   add_scope_symbols(items);
+  add_cast_keywords(items);
   add_io_members(items);
   add_namespace_completions(items);
   return items;

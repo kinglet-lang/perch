@@ -35,6 +35,7 @@ private:
   void add_io_members(json::Array &items);
   void add_type_keywords(json::Array &items);
   void add_type_keywords(json::Array &items, bool include_void_auto);
+  void add_cast_keywords(json::Array &items);
   void add_statement_keywords(json::Array &items);
   void add_decl_keywords(json::Array &items);
   void add_namespace_completions(json::Array &items);
