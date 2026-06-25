@@ -107,6 +107,15 @@ PROBES = [
      "int main() {\n  return \n}\n",
      [(1, 9)]),
 
+    # ── match with array / struct patterns (regression: parser hang) ──
+    # Cursor inside an array pattern previously sent the parser into an
+    # unbounded loop. These positions exercise that path; they must return
+    # promptly with candidates rather than hang.
+    ("match array pattern",
+     "int main() {\n  int[] arr = [1, 2];\n  int s = arr match {\n"
+     "    [let a, let b] => a + b,\n    _ => 0,\n  };\n  return 0;\n}\n",
+     [(3, 5), (4, 9)]),
+
     # ── type position (fn return) ──
     ("fn return type",
      "  int main() {\n    return 0;\n  }\n}\n",
