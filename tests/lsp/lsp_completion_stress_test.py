@@ -93,6 +93,15 @@ PROBES = [
      "using io;\nint main() {\n  io::\n  return 0;\n}\n",
      [(2, 5)]),
 
+    # ── concept declaration + namespace access ──
+    ("concept body type",
+     "concept P<T> {\n  string to_string(T value);\n}\nint main() { return 0; }\n",
+     [(1, 2)]),
+    ("concept namespace access",
+     "concept P<T> {\n  string to_string(T value);\n}\n"
+     "int main() {\n  string s = P::\n  return 0;\n}\n",
+     [(4, 16)]),
+
     # ── return expression ──
     ("return expr",
      "int main() {\n  return \n}\n",

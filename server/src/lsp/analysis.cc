@@ -87,6 +87,9 @@ private:
       sym.location = concept_decl->location;
       sym.scope_start_line = 0;
       sym.scope_end_line = 999999;
+      for (const auto &method : concept_decl->methods) {
+        sym.concept_methods.push_back(FieldSymbol{method.name, method.return_type.to_string()});
+      }
       table_.symbols.push_back(std::move(sym));
     } else if (const auto *top = dynamic_cast<const ast::TopLevelStmtDecl *>(&decl)) {
       visit_stmt(*top->stmt, 0);

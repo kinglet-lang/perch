@@ -499,13 +499,20 @@ json::Array CompletionResolver::resolve_namespace_access(const std::string &ns_n
     }
   }
 
-  // EnumName:: — suggest the enum's variants.
+  // Local type-driven completions: Enum:: → variants, Concept:: → methods.
   auto visible = analysis_.symbols.visible_at(line_ + 1);
   for (const auto *sym : visible) {
     if (sym->kind == SymbolKind::Enum && sym->name == ns_name) {
       for (const auto &variant : sym->variants) {
         if (!matches_prefix(variant)) continue;
         items.push_back(protocol::completion_item(variant, 20, ns_name + " variant"));
+      }
+      break;
+    }
+    if (sym->kind == SymbolKind::Concept && sym->name == ns_name) {
+      for (const auto &method : sym->concept_methods) {
+        if (!matches_prefix(method.name)) continue;
+        items.push_back(protocol::completion_item(method.name, 2, method.type_name));
       }
       break;
     }
